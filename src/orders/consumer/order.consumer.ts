@@ -9,11 +9,12 @@ export class OrdersConsumerController {
 
     @EventPattern('order.create')
     handleOrderCreated(@Payload() order: OrderDto) {
-        return this.orderServiceConsumer.handleOrderPlaced(order)
-    }
-
-    @MessagePattern({ cmd: 'fetch-orders' })
-    handleFetchOrders() {
-        return this.orderServiceConsumer.handleGetOrders()
+        try {
+            return this.orderServiceConsumer.handleOrderRegistration(order)
+        } catch (error) {
+            return {
+                message: error.message
+            }
+        }
     }
 }

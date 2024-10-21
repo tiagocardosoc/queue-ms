@@ -4,6 +4,9 @@ import { OrdersController } from './orders.controller';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { OrderConsumerService } from './consumer/order-consumer.service';
 import { OrdersConsumerController } from './consumer/order.consumer';
+import { MailPublishService } from 'src/email/publishers/mail.publisher';
+import { MailModule } from 'src/email/email.module';
+import { DatabaseModule } from 'src/database/database.module';
 
 @Module({
   imports: [
@@ -17,6 +20,8 @@ import { OrdersConsumerController } from './consumer/order.consumer';
         },
       }
     ]),
+    MailModule,
+    DatabaseModule
   ],
   controllers: [OrdersController, OrdersConsumerController],
   providers: [OrdersServicePublisher, OrderConsumerService],

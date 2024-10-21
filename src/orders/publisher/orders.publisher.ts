@@ -6,13 +6,9 @@ import { ClientProxy } from '@nestjs/microservices';
 export class OrdersServicePublisher {
     constructor(@Inject('ORDERS_SERVICE') private rabbitClient: ClientProxy) { }
 
-    placeOrder(order: OrderDto) {
+    registerOrder(order: OrderDto) {
         this.rabbitClient.emit('order.create', order)
 
-        return { message: 'Order placed!' }
-    }
-
-    getOrders() {
-        return this.rabbitClient.send({ cmd: 'fetch-orders' }, {})
+        return "The order will be registered soon."
     }
 }

@@ -1,17 +1,17 @@
 import { Injectable } from "@nestjs/common";
 import { OrderDto } from "../dto/order.dto";
+import { MailPublishService } from "src/email/publishers/mail.publisher";
+import { OrderRepository } from "src/database/repository/order.repository";
 
 @Injectable()
 export class OrderConsumerService {
+    constructor(
+        private readonly mailPublisherService: MailPublishService,
+        private readonly orderRepository: OrderRepository
+    ) { }
 
-    orders: OrderDto[] = []
-
-    handleOrderPlaced(order: OrderDto) {
-        console.log(`Received new order - costumer: ${order.email} `)
-        this.orders.push(order)
-    }
-
-    handleGetOrders() {
-        return this.orders
+    async handleOrderRegistration(orderData: OrderDto) {
+        await this.orderRepository.save(orderData)
+        await this.mailPublisherService.sendMailToQueue(orderData)
     }
 }
